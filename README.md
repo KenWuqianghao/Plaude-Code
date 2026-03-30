@@ -44,6 +44,17 @@ swift build -c release
 ./scripts/build-dmg.sh 1.0.0   # version argument; outputs dist/PlaudeCode-1.0.0.dmg
 ```
 
+## Logo
+
+Minimal mark (touchpad + code brackets) for menus, Dock, and GitHub:
+
+| File | Use |
+|------|-----|
+| [`Packaging/Logo/AppIcon-1024.png`](Packaging/Logo/AppIcon-1024.png) | Raster master (~1024²); derive `.icns` / asset sizes in Xcode or `iconutil` |
+| [`Packaging/Logo/PlaudeCode-mark.svg`](Packaging/Logo/PlaudeCode-mark.svg) | Vector variant (flat colors: `#0d1117` / `#f0e6d2`) |
+
+The shipping menu bar item still uses the system **gamecontroller** symbol until a bundled template image is wired into the target.
+
 ## License
 
 No license file is bundled in this repository yet; treat usage as **all rights reserved** until one is added.

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Plaude Code">
+  <!-- Minimal mark: touchpad frame + code brackets, single stroke weight -->
+  <rect width="128" height="128" rx="28" fill="#0d1117"/>
+  <g fill="none" stroke="#f0e6d2" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="34" y="42" width="60" height="44" rx="12"/>
+    <path d="M52 62 44 54v20l8-8"/>
+    <path d="M76 62l8-8v20l-8-8"/>
+  </g>
+</svg>
