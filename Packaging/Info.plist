@@ -8,6 +8,8 @@
 	<string>Plaude Code</string>
 	<key>CFBundleExecutable</key>
 	<string>PlaudeCode</string>
+	<key>CFBundleIconFile</key>
+	<string>AppIcon</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.plaudecode.PlaudeCode</string>
 	<key>CFBundleInfoDictionaryVersion</key>

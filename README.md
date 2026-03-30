@@ -44,6 +44,8 @@ swift build -c release
 ./scripts/build-dmg.sh 1.0.0   # version argument; outputs dist/PlaudeCode-1.0.0.dmg
 ```
 
+The script builds a **proper `.app`** with `AppIcon.icns`, **`PkgInfo`**, **ad-hoc `codesign`**, then lays out a **read/write HFS+** disk image and converts it to a compressed DMG (more reliable than `hdiutil create -srcfolder` alone). The DMG includes an **Applications** shortcut for drag-install.
+
 ## Logo
 
 Minimal mark (touchpad + code brackets) for menus, Dock, and GitHub:
