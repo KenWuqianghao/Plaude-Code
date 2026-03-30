@@ -59,8 +59,15 @@ rm -rf "$ICONSET"
 # Strip extended attributes (avoids Gatekeeper “damaged” after copy from DMG).
 xattr -cr "$APP_DIR"
 
-# Ad-hoc sign the bundle so macOS accepts it when dragged out of the DMG.
-codesign --force --sign - --timestamp=none --deep "$APP_DIR"
+# Signing:
+# • Release DMGs from GitHub use ad-hoc signing (`-`). macOS still shows a malware warning until the app is
+#   signed with Developer ID and the DMG is notarized; see README.
+# • Set CODESIGN_IDENTITY to "Developer ID Application: Your Name (TEAMID)" for a notarizable build.
+if [[ -n "${CODESIGN_IDENTITY:-}" ]]; then
+	codesign --force --sign "$CODESIGN_IDENTITY" --timestamp --options runtime --deep "$APP_DIR"
+else
+	codesign --force --sign - --timestamp=none --deep "$APP_DIR"
+fi
 
 # ---- DMG: blank read-write image → copy → detach → compress ----
 mkdir -p "$MOUNT_PT"

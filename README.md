@@ -21,7 +21,37 @@ Menu bar macOS app that maps a **DualSense** (and similar) controller to keyboar
 2. Open the disk image and drag **Plaude Code** into **Applications**.
 3. Launch the app. When macOS prompts you, grant **Accessibility** (and related permissions as shown in the menu bar window) so key and pointer injection can work.
 
-> Unsigned builds may require **Right-click → Open** the first time you run the app, or approval under **Privacy & Security** in System Settings.
+### First launch: “Apple could not verify…” (Gatekeeper)
+
+GitHub DMGs are **ad-hoc signed**, not **notarized**. macOS may say the app **can’t be verified** or **may harm your Mac**. That is Gatekeeper blocking apps that are not on Apple's “allowed” list—not a claim that the build contains malware.
+
+**Ways to open it anyway (pick one):**
+
+1. **Finder → Applications → Plaude Code** — **Control-click** (or right-click) the app → **Open** → confirm **Open** in the dialog. You only need to do this once.
+2. If you already tried to open it: **System Settings → Privacy & Security** — scroll to the message about Plaude Code → **Open Anyway** (may require login).
+
+There is **no way in this repo** to remove that warning for strangers downloading the DMG without a **paid Apple Developer** account: you must **Developer ID sign** the app and **notarize** the disk image (Apple scans it, then you “staple” the ticket). Public releases here stay ad-hoc until a maintainer runs that pipeline.
+
+### Notarized builds (maintainers)
+
+1. Enroll in the **[Apple Developer Program](https://developer.apple.com/programs/)** and install a **Developer ID Application** certificate in Keychain.
+2. Build the DMG with signing (replace identity string from Keychain / `security find-identity -v -p codesigning`):
+
+   ```bash
+   export CODESIGN_IDENTITY="Developer ID Application: Your Name (XXXXXXXXXX)"
+   ./scripts/build-dmg.sh 1.0.0
+   ```
+
+3. Save **notarytool** credentials once ([Apple: Notarize with notarytool](https://developer.apple.com/documentation/securitynotaryapi)):  
+   `xcrun notarytool store-credentials "plaude-notary" --apple-id "..." --team-id "..." --password "..."`
+
+4. Submit and staple:
+
+   ```bash
+   NOTARY_PROFILE=plaude-notary ./scripts/notarize-dmg.sh dist/PlaudeCode-1.0.0.dmg
+   ```
+
+After stapling, upload **that** DMG to GitHub Releases; downloaders should **not** see the verification warning (assuming default Gatekeeper settings).
 
 ## Development
 
@@ -44,7 +74,9 @@ swift build -c release
 ./scripts/build-dmg.sh 1.0.0   # version argument; outputs dist/PlaudeCode-1.0.0.dmg
 ```
 
-The script builds a **proper `.app`** with `AppIcon.icns`, **`PkgInfo`**, **ad-hoc `codesign`**, then lays out a **read/write HFS+** disk image and converts it to a compressed DMG (more reliable than `hdiutil create -srcfolder` alone). The DMG includes an **Applications** shortcut for drag-install.
+The script builds a **proper `.app`** with `AppIcon.icns`, **`PkgInfo`**, and **`codesign`**, then lays out a **read/write HFS+** disk image and converts it to a compressed DMG (more reliable than `hdiutil create -srcfolder` alone). The DMG includes an **Applications** shortcut for drag-install.
+
+Set **`CODESIGN_IDENTITY`** to a **Developer ID Application** identity before running the script to produce a build that Apple will accept after **notarization** (see above).
 
 ## Logo
 
